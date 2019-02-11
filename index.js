@@ -57,6 +57,15 @@ app.get('/pet', function(req, res){
    }
 });
 
+app.get('/:page', function(req, res){
+
+    var info = {
+        page : req.params.page
+    };
+
+    res.json(info)
+});
+
 // -------------- listener -------------- //
 // // The listener is what keeps node 'alive.' 
 
