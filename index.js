@@ -57,6 +57,19 @@ app.get('/pet', function(req, res){
    }
 });
 
+app.get('/stuff', function(req, res){
+    var query = req.query.q;
+    var user = req.query.user;
+
+
+    var dict = {
+        user : user,
+        foods : ['1', '2', '3', '4']
+    };
+
+    res.render('index', dict);
+});
+
 app.get('/:page', function(req, res){
 
     var info = {
