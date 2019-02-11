@@ -3,14 +3,16 @@
 // -------------- load packages -------------- //
 // INITIALIZATION STUFF
 
-var express = require('express')
+var express = require('express');
 var app = express();
+var hbs = require('hbs');
 
 
 // -------------- express initialization -------------- //
 // PORT SETUP - NUMBER SPECIFIC TO THIS SYSTEM
 
 app.set('port', process.env.PORT || 8080 );
+app.set('view engine', 'hbs');
 
 
 // -------------- express 'get' handlers -------------- //
