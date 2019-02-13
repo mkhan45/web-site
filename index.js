@@ -60,13 +60,21 @@ app.get('/pet', function(req, res){
 });
 
 app.get('/stuff', function(req, res){
-    var query = req.query.q;
-    var user = req.query.user;
 
+    var facts = new Array(req.query.num_facts);
+    for (i in num_facts){
+        var url = "http://numbersapi.com/" + req.query.num;
+        var xhttp = new XMLHttpRequest();
+         xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                facts.push(document.querySelector('pre').innerHTML);
+            }
+        };
+    }
 
     var dict = {
-        user : user,
-        foods : ['1', '2', '3', '4']
+        number : req.query.num,
+        fact_arr : facts,
     };
 
     res.render('index', dict);
