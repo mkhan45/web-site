@@ -61,6 +61,46 @@ app.get('/pet', function(req, res){
    }
 });
 
+
+app.get('/stuff_async', function(req, res){
+    async_facts(req.query.num, req.query.num_facts, function(data, err){
+        if(err)
+            res.send("error");
+        res.send(data);
+    });
+    //res.send(get_facts(req.query.num, req.query.num_facts));
+});
+
+function async_facts(num, num_facts, callback){
+    var params = {
+    url : 'https://api.weather.gov/points/39.7456,-97.0892',
+    headers : {
+     'User-Agent': 'request'
+    }
+    };
+    
+    request(params, function(error, response, body){
+        console.log('error: ', error);
+        console.log('statuscode:', response);
+        console.log('body:', body);
+       if(!error && response.statusCode == 200){
+           result = body;
+           callback(result, false)
+       } else {
+           callback(null, true);
+       }
+    });
+}
+
+function get_facts(num, num_facts){
+    var facts = [];
+    var url = "http://numbersapi.com/";
+    for (var i = 0; i < num_facts; i++){
+        facts.push(sync('GET', url + num).getBody());
+    }
+    return(facts);
+}
+
 app.get('/:page', function(req, res){
     var dict = {
         number : req.params.page,
@@ -82,36 +122,6 @@ app.get('/:page', function(req, res){
     //res.send(get_facts(req.query.num, req.query.num_facts));
 });
 
-app.get('/stuff_async', function(req, res){
-    async_facts(req.query.num, req.query.num_facts, function(err, data){
-        if(err)
-        return res.send(err);
-    res.send(data);
-    });
-
-    //res.send(get_facts(req.query.num, req.query.num_facts));
-});
-
-function get_facts(num, num_facts){
-    var facts = [];
-    var url = "http://numbersapi.com/";
-    for (var i = 0; i < num_facts; i++){
-        facts.push(sync('GET', url + num).getBody());
-    }
-    return(facts);
-}
-
-function async_facts(num, num_facts, callback){
-    var url = "http://numbersapi.com/" + num;
-    request("http://numbersapi.com/12", function(error, response, body){
-       if(!error && response.statusCode == 200){
-           result = JSON.stringify(JSON.parse(body));
-           return callback(result, false)
-       } else {
-           return callback(null, error);
-       }
-    });
-}
 
 
 // app.get('/:page', function(req, res){
