@@ -6,7 +6,9 @@
 var express = require('express');
 var app = express();
 var hbs = require('hbs');
-
+var http = require('http');
+var request = require('request');
+var sync = require('sync-request');
 
 // -------------- express initialization -------------- //
 // PORT SETUP - NUMBER SPECIFIC TO THIS SYSTEM
@@ -60,25 +62,35 @@ app.get('/pet', function(req, res){
 });
 
 app.get('/stuff', function(req, res){
-
-    var facts = new Array(req.query.num_facts);
-    for (i in num_facts){
-        var url = "http://numbersapi.com/" + req.query.num;
-        var xhttp = new XMLHttpRequest();
-         xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                facts.push(document.querySelector('pre').innerHTML);
-            }
-        };
-    }
-
     var dict = {
         number : req.query.num,
-        fact_arr : facts,
+        fact_arr : get_facts(req.query.num, req.query.num_facts),
     };
 
-    res.render('index', dict);
+    if (req.query.format == "json"){
+        var json = "{\"facts\":[";
+        dict.fact_arr.forEach(function(fact){
+            json += "\"" +  fact.toString().replace(new RegExp("\"", 'g'), "\\\"") + "\",";
+        });
+        
+        res.contentType('application/json');
+        res.send(json.substring(0, json.length-1) + "]}");
+        //res.json({facts: dict.fact_arr});
+    }
+    else
+        res.render('index', dict);
+    //res.send(get_facts(req.query.num, req.query.num_facts));
 });
+
+function get_facts(num, num_facts){
+    var facts = [];
+    var url = "http://numbersapi.com/";
+    for (var i = 0; i < num_facts; i++){
+        facts.push(sync('GET', url + num).getBody());
+    }
+    return(facts);
+}
+
 
 app.get('/:page', function(req, res){
 

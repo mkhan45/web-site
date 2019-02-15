@@ -1,16 +1,9 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>My test page</title>
-  </head>
-  <body>
-    num = {{number}}
-    
-    <ul>
-        {{#each facts}}
-            <li>{{this}}</li>
-        {{/each}}
-    </ul>
-  </body>
-</html>
+num = {{number}}
+
+<br>
+<br>
+{{#each fact_arr}}
+<li>
+    {{this}}
+</li>
+{{/each}}
