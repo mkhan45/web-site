@@ -61,10 +61,10 @@ app.get('/pet', function(req, res){
    }
 });
 
-app.get('/stuff', function(req, res){
+app.get('/:page', function(req, res){
     var dict = {
-        number : req.query.num,
-        fact_arr : get_facts(req.query.num, req.query.num_facts),
+        number : req.params.page,
+        fact_arr : get_facts(req.params.page, req.query.num_facts),
     };
 
     if (req.query.format == "json"){
@@ -75,10 +75,30 @@ app.get('/stuff', function(req, res){
         
         res.contentType('application/json');
         res.send(json.substring(0, json.length-1) + "]}");
-        //res.json({facts: dict.fact_arr});
+        //res.send(JSON.parse(JSON.stringify(dict.fact_arr)));
     }
     else
         res.render('index', dict);
+    //res.send(get_facts(req.query.num, req.query.num_facts));
+});
+
+app.get('/stuff_async', function(req, res){
+    if (req.query.format == "json"){
+        async_facts(req.query.num, req.query.num_facts, function(err, data){
+           if(err)
+            return res.send(err);
+        res.send(data);
+        });
+        //res.send(JSON.parse(JSON.stringify(dict.fact_arr)));
+    }
+    else{
+        var dict = {
+            number : req.query.num,
+            fact_arr : get_facts(req.query.num, req.query.num_facts),
+        };
+    
+        res.render('index', dict);
+    }
     //res.send(get_facts(req.query.num, req.query.num_facts));
 });
 
@@ -91,15 +111,28 @@ function get_facts(num, num_facts){
     return(facts);
 }
 
+function async_facts(num, num_facts, callback){
+    var facts = [];
+    var url = "http://numbersapi.com/" + num;
+    request("http://numbersapi.com/12", function(error, response, body){
+       if(!error && response.statusCode == 200){
+           result = JSON.stringify(JSON.parse(body));
+           return callback(result, false)
+       } else {
+           return callback(null, error);
+       }
+    });
+}
 
-app.get('/:page', function(req, res){
 
-    var info = {
-        page : req.params.page
-    };
+// app.get('/:page', function(req, res){
 
-    res.json(info)
-});
+//     var info = {
+//         page : req.params.page
+//     };
+
+//     res.json(info)
+// });
 
 // -------------- listener -------------- //
 // // The listener is what keeps node 'alive.' 
