@@ -96,8 +96,9 @@ app.get('/stuff_async', function(req, res){
             number : req.query.num,
             fact_arr : get_facts(req.query.num, req.query.num_facts),
         };
-    
-        res.render('index', dict);
+        
+        res.send(requ.query.num);
+        // res.render('index', dict);
     }
     //res.send(get_facts(req.query.num, req.query.num_facts));
 });
@@ -112,7 +113,6 @@ function get_facts(num, num_facts){
 }
 
 function async_facts(num, num_facts, callback){
-    var facts = [];
     var url = "http://numbersapi.com/" + num;
     request("http://numbersapi.com/12", function(error, response, body){
        if(!error && response.statusCode == 200){
