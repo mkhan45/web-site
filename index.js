@@ -83,23 +83,12 @@ app.get('/:page', function(req, res){
 });
 
 app.get('/stuff_async', function(req, res){
-    if (req.query.format == "json"){
-        async_facts(req.query.num, req.query.num_facts, function(err, data){
-           if(err)
-            return res.send(err);
-        res.send(data);
-        });
-        //res.send(JSON.parse(JSON.stringify(dict.fact_arr)));
-    }
-    else{
-        var dict = {
-            number : req.query.num,
-            fact_arr : get_facts(req.query.num, req.query.num_facts),
-        };
-        
-        res.send(requ.query.num);
-        // res.render('index', dict);
-    }
+    async_facts(req.query.num, req.query.num_facts, function(err, data){
+        if(err)
+        return res.send(err);
+    res.send(data);
+    });
+
     //res.send(get_facts(req.query.num, req.query.num_facts));
 });
 
