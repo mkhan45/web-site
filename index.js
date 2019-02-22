@@ -63,31 +63,64 @@ app.get('/pet', function(req, res){
 
 
 app.get('/stuff_async', function(req, res){
-    async_facts(req.query.num, req.query.num_facts, function(data, err){
+    var params = {
+        url : 'https://api.weather.gov/points/',
+        headers : {
+            'User-Agent': 'request'
+        }
+    };
+    async_facts(req.query.lat, req.query.long, function(data, err){
         if(err)
-            res.send("error");
-        res.send(data);
+            res.send(err.toString());
+        data = JSON.parse(data);
+        params.url = data["properties"]["forecast"]
+        var forecast = ""
+        
+        request(params, function(error, response, body){
+           if(!error && response.statusCode == 200){
+               var result = body;
+               var forecast = JSON.parse(result);
+               var data = []
+               var periods = forecast["properties"]["periods"];
+               console.log(periods);
+               
+               for (var i = 0; i < periods.length; i++){
+                   //console.log("Period: " + period["temperature"]);
+                   temp = periods[i]["temperature"];
+                   details = periods[i]["detailedForecast"];
+                   data.push({
+                       "per": periods[i]["name"],
+                       "temp": temp,
+                       "details": details,
+                   });
+               }
+               
+               var dict = {
+                   data_arr: data,
+               }
+               res.render("index", dict);
+           } else {
+               forecast = "error";
+           }
+        });
     });
     //res.send(get_facts(req.query.num, req.query.num_facts));
 });
 
-function async_facts(num, num_facts, callback){
+function async_facts(lat, long, callback){
     var params = {
-    url : 'https://api.weather.gov/points/39.7456,-97.0892',
-    headers : {
-     'User-Agent': 'request'
-    }
+        url : 'https://api.weather.gov/points/' + lat + "," + long,
+        headers : {
+            'User-Agent': 'request'
+        }
     };
     
     request(params, function(error, response, body){
-        console.log('error: ', error);
-        console.log('statuscode:', response);
-        console.log('body:', body);
        if(!error && response.statusCode == 200){
            result = body;
-           callback(result, false)
+           callback(result, false);
        } else {
-           callback(null, true);
+           callback(null, "error");
        }
     });
 }

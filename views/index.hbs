@@ -1,9 +1,39 @@
-num = {{number}}
+<title>Weather</title>
 
-<br>
-<br>
-{{#each fact_arr}}
-<li>
-    {{this}}
-</li>
+{{#each data_arr}}
+
+<h1>{{this.per}}</h1>
+
+<div class="body">
+    
+    Temperature: {{this.temp}}
+    <br>
+    {{this.details}}
+    
+    <hr/>
+</div>
+
 {{/each}}
+
+<style>
+    h1{
+        font-size: 24;
+        font-family: Sans-Serif;
+    }
+    
+    .body{
+        font-size: 16;
+        font-family: Sans-Serif;
+    }
+    
+    hr {
+    display: block;
+    height: .5%;
+    border: 0;
+    border-top: .5%;
+    margin: 1em 0;
+    padding: 0;
+    background: black;
+    }
+    
+</style>
