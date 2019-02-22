@@ -61,6 +61,9 @@ app.get('/pet', function(req, res){
    }
 });
 
+app.get('/funpage', function(req, res){
+   res.render(funpage);
+});
 
 app.get('/stuff_async', function(req, res){
     var params = {
