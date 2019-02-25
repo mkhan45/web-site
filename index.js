@@ -65,6 +65,10 @@ app.get('/funpage', function(req, res){
    res.render('funpage');
 });
 
+app.get('/weather_form', function(req, res){
+	res.render('ajax');
+});
+
 app.get('/stuff_async', function(req, res){
     var params = {
         url : 'https://api.weather.gov/points/',
