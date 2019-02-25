@@ -9,6 +9,7 @@ var hbs = require('hbs');
 var http = require('http');
 var request = require('request');
 var sync = require('sync-request');
+var path = require('path');
 
 // -------------- express initialization -------------- //
 // PORT SETUP - NUMBER SPECIFIC TO THIS SYSTEM
@@ -16,6 +17,9 @@ var sync = require('sync-request');
 app.set('port', process.env.PORT || 8080 );
 app.set('view engine', 'hbs');
 
+app.use('/js', express.static(path.join(__dirname, 'js')))
+app.use('/css', express.static(path.join(__dirname, 'css')))
+    
 
 // -------------- express 'get' handlers -------------- //
 // These 'getters' are what fetch your pages
@@ -66,7 +70,7 @@ app.get('/funpage', function(req, res){
 });
 
 app.get('/weather_form', function(req, res){
-	res.render('ajax');
+	res.sendFile('views/ajax.html', {root: __dirname})
 });
 
 app.get('/stuff_async', function(req, res){
