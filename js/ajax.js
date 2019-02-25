@@ -2,6 +2,7 @@ console.log('hi');
 
 
 function loadWeather(){
+	console.log('hi');
 	$.ajax({
 		url: "kitchen",                      // goes to https://user.tjhsst.edu/pckosek/kitchen
 		type: "get",                         // use a 'get' type request
@@ -11,7 +12,7 @@ function loadWeather(){
 			// -- AND -- everthing went ok
 			// update the display
 			// (bring the order to the customer)
-			$("weather").html(response.weather);
+			$("#weather").html(response.weather);
 		},
 
 		error: function (stat, err) {
@@ -19,7 +20,7 @@ function loadWeather(){
 			// -- BUT -- something went wrong (like invalid menu_item)
 			// update the display
 			// (bring the explanation to the customer)
-			$("weather").html("error");
+			$("#weather").html("error");
 		}
 	});
 }
