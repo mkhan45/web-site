@@ -12,6 +12,7 @@ function loadWeather(){
 			// -- AND -- everthing went ok
 			// update the display
 			// (bring the order to the customer)
+			console.log("error");
 			$("#weather").html(response.weather);
 		},
 
@@ -20,6 +21,7 @@ function loadWeather(){
 			// -- BUT -- something went wrong (like invalid menu_item)
 			// update the display
 			// (bring the explanation to the customer)
+			console.log("error");
 			$("#weather").html("error");
 		}
 	});
