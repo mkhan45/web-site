@@ -17,6 +17,6 @@ $.ajax({
 		// -- BUT -- something went wrong (like invalid menu_item)
 		// update the display
 		// (bring the explanation to the customer)
-		$("weather").html("error);
+		$("weather").html("error");
 	}
 });
