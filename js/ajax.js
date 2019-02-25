@@ -22,6 +22,7 @@ function loadWeather(){
 			// update the display
 			// (bring the explanation to the customer)
 			console.log("error");
+			document.findElementById("weather").innerHTML = "error";
 			$("#weather").html("error");
 		}
 	});
