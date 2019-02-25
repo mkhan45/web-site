@@ -3,8 +3,12 @@ console.log('hi');
 
 function loadWeather(){
 	console.log('hi');
+	var lat = document.getElementById("lat").value;
+	var long = document.getElementById("long").value;
+	var urll ="stuff_async?lat="+ lat + "&long=" + long;
+	console.log(urll);
 	$.ajax({
-		url: "kitchen",                      // goes to https://user.tjhsst.edu/pckosek/kitchen
+		url: urll,                      // goes to https://user.tjhsst.edu/pckosek/kitchen
 		type: "get",                         // use a 'get' type request
 		data:  $('#coord').serialize(), //serialize form and pass to server
 		success: function(response) {
@@ -13,6 +17,7 @@ function loadWeather(){
 			// update the display
 			// (bring the order to the customer)
 			console.log("error");
+			document.getElementById("weather").innerHTML = response;
 			$("#weather").html(response.weather);
 		},
 
@@ -22,7 +27,7 @@ function loadWeather(){
 			// update the display
 			// (bring the explanation to the customer)
 			console.log("error");
-			document.findElementById("weather").innerHTML = "error";
+			document.getElementById("weather").innerHTML = "error";
 			$("#weather").html("error");
 		}
 	});
