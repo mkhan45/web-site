@@ -66,7 +66,10 @@ app.get('/pet', function(req, res){
 });
 
 app.get('/funpage', function(req, res){
-   res.render('funpage');
+   dict = {
+      theme: req.query.theme;
+   }
+   res.render('funpage', dict);
 });
 
 app.get('/weather_form', function(req, res){
