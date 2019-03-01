@@ -67,7 +67,7 @@ app.get('/pet', function(req, res){
 
 app.get('/funpage', function(req, res){
 	if(!req.query.theme)
-		  req.query.theme = light;
+		  req.query.theme = "light";
    dict = {
       theme: req.query.theme
    };
