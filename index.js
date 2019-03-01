@@ -17,8 +17,8 @@ var path = require('path');
 app.set('port', process.env.PORT || 8080 );
 app.set('view engine', 'hbs');
 
-app.use('/js', express.static(path.join(__dirname, 'js')))
-app.use('/css', express.static(path.join(__dirname, 'css')))
+app.use('/js', express.static(path.join(__dirname, 'js')));
+app.use('/css', express.static(path.join(__dirname, 'css')));
     
 
 // -------------- express 'get' handlers -------------- //
