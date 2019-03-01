@@ -67,8 +67,8 @@ app.get('/pet', function(req, res){
 
 app.get('/funpage', function(req, res){
    dict = {
-      theme: req.query.theme;
-   }
+      theme: req.query.theme
+   };
    res.render('funpage', dict);
 });
 
