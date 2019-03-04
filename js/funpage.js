@@ -4,8 +4,6 @@ function buttonclick(){
 }
 
 document.onkeypress = function (e){
-    console.log("test")
 	e = e || window.event;
-
-	console.log(e.keyCode);
+	console.log(e);
 }
