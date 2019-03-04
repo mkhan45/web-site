@@ -3,7 +3,8 @@ function buttonclick(){
 	body.innerHTML = "clicked";
 }
 
-document.onKeyPress = function (e){
+document.onkeypress = function (e){
+    console.log("test")
 	e = e || window.event;
 
 	console.log(e.keyCode);
