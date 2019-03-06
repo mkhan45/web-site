@@ -1,0 +1,34 @@
+.displayContainer_1 {
+    margin-left: 15%;
+    margin-right: 15%;
+    padding: 0;
+    width: 85%;    
+}
+
+.displayContainer_1 svg path {
+    fill: #AAA;
+    transition: fill .4s ease-out; 
+}
+ 
+
+.displayContainer_1 svg path:hover {
+    fill:#FFF;
+    stroke:black;
+    pointer-events:all;
+}
+    margin-right: 15%;
+    padding: 0;
+    width: 85%;    
+}
+
+.displayContainer_1 svg path {
+    fill: #AAA;
+    transition: fill .4s ease-out; 
+}
+ 
+
+.displayContainer_1 svg path:hover {
+    fill:#FFF;
+    stroke:black;
+    pointer-events:all;
+}

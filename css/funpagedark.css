@@ -1,0 +1,39 @@
+.nav{
+    text-align: center;
+}
+
+a{
+    background: #FFFFFF;
+    color: #222222;
+    border-radius: 20%;
+    font-size: 24px;
+    font-family: sans-serif;
+    padding-left: 2.5%;
+    padding-right: 2.5%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    transition-duration: .2s;
+}
+
+a:hover{
+    background: #222222;
+    color: white;
+    font-size: 36;
+}
+
+body{
+    display: grid;
+}
+
+img{
+    margin-left: auto;
+    margin-right: 5%;
+    float: left;
+}
+
+.textbox{
+    margin: auto;
+    font-size: 24px;
+    padding: 10px;
+    font-family: sans-serif;
+}
