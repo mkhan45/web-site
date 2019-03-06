@@ -4,6 +4,6 @@
 
 var states = document.getElementById("outlines").children;
 
-states.forEach(function (state){
+for (let state of states){
 	state.fill = "#00FFFFFF";
-});
+}
