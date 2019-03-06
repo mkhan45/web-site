@@ -75,7 +75,8 @@ app.get('/funpage', function(req, res){
 });
 
 app.get('/map', function(req, res){
-	res.render('map');
+	dict = {};
+	res.render('map', dict);
 });
 
 app.get('/weather_form', function(req, res){
