@@ -86,9 +86,13 @@
 			</svg>  
 		</div>
 
-		<form>
-			<input id="statebar" type="text"></input>
+		<form action="javascript:void(0)" onsubmit="verify()">
+			<input id="statebar" type="text" autofocus></input>
 		</form>
+		<div id="score">
+		    Score: 0
+		</div>
+		<button onclick="start()">Start</button>
 
 
 

@@ -54,6 +54,35 @@ app.get('/cat', function(req, res){
 	res.sendFile('dog.jpg', { root: __dirname});
 });
 
+app.get('/survey', function(req, res){
+    dict = {
+        
+    };
+   res.render('survey', dict) 
+});
+
+var browserScores = {
+    "firefox": 0,
+    "chrome": 0,
+    "vivaldi": 0,
+    "opera": 0,
+}
+
+
+
+app.get('/submit', function(req, res){
+    browser = req.query.response;
+    
+    browserScores[browser] += 1;
+    
+    dict = {
+        scores: browserScores,
+    };
+    res.render('surveyResults', dict)
+});
+
+
+
 app.get('/pet', function(req, res){
 	var query = req.query.q;
 	switch (query){
@@ -64,6 +93,7 @@ app.get('/pet', function(req, res){
 			res.sendFile('cat.jpg', { root: __dirname});
 	}
 });
+
 
 app.get('/funpage', function(req, res){
 	if(!req.query.theme)

@@ -1,0 +1,76 @@
+<script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="js/ajax.js"></script>
+
+<head>
+    <title>
+        Survey
+    </title>
+</head>
+
+<h1>Survey</h1>
+
+<br>
+
+<body>
+    <form id="form1">
+        <h2>Favorite Browser?</h2>
+        <input type="radio" id="chrome" name="browser" value="chrome">
+        <label for="chrome">Chrome</label>
+        <br>
+        <input type="radio" id="firefox" name="browser" value="firefox">
+        <label for="firefox">Firefox</label>
+        <br>
+        <input type="radio" id="Vivaldi" name="browser" value="vivaldi">
+        <label for="opera">Vivaldi</label>
+        <br>
+        <input type="radio" id="Opera" name="browser" value="opera">
+        <label for="opera">Opera</label>
+        <br>
+    </form>
+    <button type="button" onclick="submitbrowser()">
+            Submit
+        </button>
+    <div id="results">
+        
+    </div>
+</body>
+
+<script>
+    function submitbrowser(){
+        var form = document.getElementById("form1");
+        var browser = (getradio(form, "browser"));
+        
+        $.ajax({
+    		url: "https://user.tjhsst.edu/2020mkhan/submit?response=" + browser,                      // goes to https://user.tjhsst.edu/pckosek/kitchen
+    		type: "get",                         // use a 'get' type request
+    		success: function(response) {
+    			// THIS FUNCTION IS CALLED WHEN KITCHEN IS COMPLETE
+    			// -- AND -- everthing went ok
+    			// update the display
+    			// (bring the order to the customer)
+    			document.getElementById("results").innerHTML = response;
+    		},
+    
+    		error: function (stat, err) {
+    			// THIS FUNCTION IS CALLED WHEN KITCHEN IS COMPLETE
+    			// -- BUT -- something went wrong (like invalid menu_item)
+    			// update the display
+    			// (bring the explanation to the customer)
+    			console.log("error");
+    			document.getElementById("weather").innerHTML = "error";
+    			$("#weather").html("error");
+    		}
+    	});
+    }
+    
+    function getradio(form, name){
+        var buttons = form.elements[name];
+        
+        for(var i = 0; i < buttons.length; i++){
+            if(buttons[i].checked){
+                return buttons[i].value
+            }
+        }    
+    }
+    
+</script>
