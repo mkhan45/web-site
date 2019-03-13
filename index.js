@@ -109,6 +109,20 @@ app.get('/map', function(req, res){
 	res.render('map', dict);
 });
 
+
+var mapscores = {
+    "George Washington": 13,
+};
+app.get('/mapsubmit', function(req, res){
+   mapscores[req.query.user] = req.query.score;
+   
+   dict = {
+       scores: mapscores,
+   };
+   
+   res.render('mapsubmit', dict);
+});
+
 app.get('/weather_form', function(req, res){
 	res.sendFile('views/ajax.html', {root: __dirname})
 });

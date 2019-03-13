@@ -5,6 +5,7 @@
 var states = document.getElementById("outlines").children;
 var arr = [] 
 
+//convert HTML array to javascript array, make all states white
 for (let state of states){
 	state.style.fill = "#FFFFFF";
 	arr.push(state.id);
@@ -25,16 +26,15 @@ function shuffleArray(array) {
 }
 
 function start(){
-    setInterval(newState, 2000);
+    setInterval(newState, 3000);
 }
 
 var score = 0;
 function verify(){
     var value = (document.getElementById("statebar").value);
-    if (value == state.id){
-        console.log("correct");
-        state.style.fill = "#AA2222"
-        state = null;
+    if (value.toUpperCase() == state.id){
+        state.style.fill = "#22AA22" //fill the state green
+        state = null; //so that you can't just press enter lots of times
         score += 1;
         document.getElementById("score").innerHTML = "Score: " + score;
     }

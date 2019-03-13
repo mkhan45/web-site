@@ -6,14 +6,7 @@
 	</head>
 	<body>
 
-		<ul>
-			<li><a class="active" href="javascript:void(0)">Link 1</a></li>
-			<li><a href="javascript:void(0)">About</a></li>
-			<li><a href="javascript:void(0)">Home</a></li>
-			<li><a href="javascript:void(0)">Settings</a></li>
-		</ul>
-
-
+		
 		<div class="displayContainer_1">
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 959 593">
 				<title>Blank US states map</title>
@@ -85,18 +78,18 @@
 				</g>
 			</svg>  
 		</div>
-
-		<form action="javascript:void(0)" onsubmit="verify()">
-			<input id="statebar" type="text" autofocus></input>
-		</form>
-		<div id="score">
-		    Score: 0
-		</div>
-		<button onclick="start()">Start</button>
-
-
-
-
-		<script type="text/javascript" src="js/map.js"></script>
+        
+        
+        <!-- Input bar -->
+		    <form action="javascript:void(0)" onsubmit="verify()">
+    			<input id="statebar" type="text" autofocus></input>
+		    </form>
+		    <button id="startbutton" onclick="start()">Start</button>
+    		<div id="score">
+    		    Score: 0
+    		</div>
+		
+		
+    		<script type="text/javascript" src="js/map.js"></script>
 	</body>
 </html>

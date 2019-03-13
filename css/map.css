@@ -9,7 +9,16 @@
     fill: #FFF;
     transition: fill .4s ease-out; 
 }
- 
 
+#startbutton {
+    background: green;
+    font-size: 24px;
+    border-radius: 10px;
+}
 
-
+ol {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    display: inline;
+}
