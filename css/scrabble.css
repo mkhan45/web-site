@@ -1,0 +1,51 @@
+body {
+    font-family: Sans-Serif;
+    margin: auto;
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+    background: #444450;
+    height: 5%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+form {
+    text-align: center;
+}
+
+.words {
+    opacity: 0;
+    font-family: Sans-Serif;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    flex: 1;
+    text-align: center;
+    transition: all .7s ease 0s;
+    white-space: pre-line;
+}
+
+.letter{
+    background: #444450;
+    color: white;
+    line-height: 1.25;
+    font-size: 18px;
+    box-shadow: 0 0 5px 2px #aaa;
+    border-radius: 5px;
+    flex-grow: 1;
+}
+
+.placeholder{
+    flex-grow: 1;
+}
+
+.key {
+    background: #444450;
+    color: white;
+    font-size: 24px;
+}

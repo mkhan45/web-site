@@ -1,10 +1,3 @@
-.displayContainer_1 {
-    margin-left: 15%;
-    margin-right: 15%;
-    padding: 0;
-    width: 85%;    
-}
-
 .displayContainer_1 svg path {
     fill: #FFF;
     transition: fill .4s ease-out; 
@@ -21,4 +14,33 @@ ol {
     padding: 0;
     list-style-type: none;
     display: inline;
+}
+
+h1 {
+   text-align: center;
+   font-family: Sans-Serif;
+}
+
+.col-8{
+    text-align:left;
+}
+
+body {
+    text-align: center;
+}
+
+nav {
+    background: #444444;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+a:hover {
+    color: red;
+    text-decoration: none;
 }

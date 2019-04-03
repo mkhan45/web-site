@@ -10,7 +10,8 @@ var http = require('http');
 var request = require('request');
 var sync = require('sync-request');
 var path = require('path');
-
+var cookieSession = require('cookie-session')
+var simpleoauth2 = require("simple-oauth2");
 // -------------- express initialization -------------- //
 // PORT SETUP - NUMBER SPECIFIC TO THIS SYSTEM
 
@@ -19,13 +20,20 @@ app.set('view engine', 'hbs');
 
 app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/css', express.static(path.join(__dirname, 'css')));
+app.use('/resources', express.static(path.join(__dirname, 'resources')));
 
 
 // -------------- express 'get' handlers -------------- //
 // These 'getters' are what fetch your pages
 
+app.use(cookieSession({
+  name: 'username',                  
+  keys: ['abcdefg', '122333444']  
+}))
+
 app.get('/', function(req, res){
-	res.send('<h1>hi</h1>');
+    var dict = {};
+	res.render('homepage', dict);
 });
 
 app.get('/foo', function(req, res){
@@ -95,6 +103,54 @@ app.get('/pet', function(req, res){
 });
 
 
+
+//login/cookie stuff here
+
+app.get('/content', function(req, res){
+    
+    var dict = {
+        user: req.session.user,
+    }
+    
+    if(req.session.user == null){
+        res.send('Content is blocked');
+    }else {
+        res.render('content', dict);
+    }
+    
+});
+
+function verify_username(req, res, next){
+    if (req.query.user !== "blacklisted_username"){
+        req.session.user = req.query.user;
+    }else {
+        req.session.user = null;
+    }
+    
+    next();
+}
+
+app.get('/login', [verify_username], function(req, res){
+    var dict = {
+        username : req.session.user,
+    }
+    
+    if (req.session.user === null){
+        res.send("you are blacklisted");
+    }
+    
+    res.render('loginpage', dict);
+});
+
+app.get('/reset', function(req, res){
+   req.session.user = null;
+   res.send('User has been logged out.');
+});
+
+
+//login/cookie stuff ends here
+
+
 app.get('/funpage', function(req, res){
 	if(!req.query.theme)
 		req.query.theme = "light";
@@ -103,6 +159,9 @@ app.get('/funpage', function(req, res){
 	};
 	res.render('funpage', dict);
 });
+
+
+//map stuff here
 
 app.get('/map', function(req, res){
 	dict = {};
@@ -113,14 +172,122 @@ app.get('/map', function(req, res){
 var mapscores = {
     "George Washington": 13,
 };
-app.get('/mapsubmit', function(req, res){
-   mapscores[req.query.user] = req.query.score;
-   
+
+function update_score(req, res, next){ //adds score and sorts
+    mapscores[req.query.user] = req.query.score;
+    
+    mapscores[Symbol.iterator] = function* () {  //sorts map by values, found on stackoverflow 37982476
+        yield* [...this.entries()].sort((a, b) => a[1] - b[1]);
+    } 
+
+    
+    console.log(mapscores);
+    next();
+}
+
+app.get('/mapsubmit', [update_score], function(req, res){
    dict = {
        scores: mapscores,
+       user: req.query.user,
    };
    
    res.render('mapsubmit', dict);
+});
+
+//map stuff ends here
+var ion_client_id = 'aWkzyHDjlQKgj5ZMlBoQxn1M53sBgM8zca1LP0dV';
+var ion_client_secret = 'qBxWtJK2MvoeeVkZWkXNONys5axNzCWfI9OKjONIUfCkJwSL8rEsB3VJKmNDD4x4WSAzoo3Foy878fr2IZ8jMbJnFFMuDHuebxzoFpoeLItrpzCqKn8WzKIYEidsLu6L';
+var ion_redirect_uri = 'https://user.tjhsst.edu/2020mkhan/login_worker';    //    <<== you choose this one
+
+var oauth2 = simpleoauth2.create({
+client: {
+    id: ion_client_id,
+    secret: ion_client_secret,
+},
+auth: {
+        tokenHost: 'https://ion.tjhsst.edu/oauth/',
+        authorizePath: 'https://ion.tjhsst.edu/oauth/authorize',
+        tokenPath: 'https://ion.tjhsst.edu/oauth/token/'
+   }
+});
+
+app.get('/scrabble', function(req, res){
+   if(req.session.oauth == null){
+       res.send("not logged in, <br> <a href='https://user.tjhsst.edu/2020mkhan/oauthlogin'>Log in</a>");
+   } else {
+       var token = req.session.oauth;
+       var dict = {};
+       res.render("scrabble", dict);
+   }
+});
+
+app.get('/oauthcontent', function(req, res){
+   if (req.session.oauth == null) {
+        res.send("not logged in, <br> <a href='https://user.tjhsst.edu/2020mkhan/oauthlogin'>Log in</a>");
+   }else {
+        // The above result will now be converted to an AccessToken
+        var token = req.session.oauth;
+        if (token == null){
+            res.send("Not logged in");
+        }
+
+        var link = 'https://ion.tjhsst.edu/api/profile?format=json&access_token='+token.token.access_token;
+        var params = {
+            url : link,
+            headers : {
+                'User-Agent': 'request'
+            }
+        };
+        
+       var dict = {};
+        request(params, function(error, response, body){
+            if(!error && response.statusCode == 200){
+                result = JSON.parse(body);
+                dict["username"] = result["ion_username"];
+                dict["name"] = result["display_name"];
+                dict["grade"] = result["grade"]["name"];
+                res.render("oauth", dict);
+            } else {
+                res.send("error");
+            }
+        });  
+   }
+});
+
+app.get('/oauthlogin', async function(req, res){
+        var authorizationUri = oauth2.authorizationCode.authorizeURL({
+            scope: "read",
+            redirect_uri: ion_redirect_uri
+        });
+        res.redirect(authorizationUri);
+    
+});
+
+app.get('/oauthlogout', async function(req, res){
+    req.session.oauth = null;
+    res.send("logged out <br> <a href='https://user.tjhsst.edu/2020mkhan/oauthlogin'>Log in</a><br><a href='https://user.tjhsst.edu/2020mkhan/'>Homepage</a>");
+});
+
+app.get('/login_worker', async function (req, res) {   // <<== async, see line 112
+    
+    if (typeof req.query.code != 'undefined') {
+        var theCode = req.query.code 
+        // .. construct options that will be used to generate a login token
+        var options = {
+            code: theCode,
+            redirect_uri: ion_redirect_uri,
+            scope: 'read'
+         };
+        var result = await oauth2.authorizationCode.getToken(options);
+        console.log(result);
+        // The above result will now be converted to an AccessToken
+        var token = oauth2.accessToken.create(result);
+        req.session.oauth = token;
+
+        res.redirect('https://user.tjhsst.edu/2020mkhan/');
+    } else {
+        res.send('no code attached')
+    }
 });
 
 app.get('/weather_form', function(req, res){

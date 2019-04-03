@@ -1,0 +1,57 @@
+h1 {
+    text-align: center;
+    font-family: Sans-Serif;
+    display: block;
+}
+
+.flexbox {
+    font-family: Sans-Serif;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+ul {
+    font-size: 18;
+    line-height: 1;
+}
+
+html {
+    background-color: light-cyan;
+}
+
+a {
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    display: inline-block;
+    width: 100%;
+}
+
+.button{
+    text-align: center;
+    color: black;
+    font-size: 18;
+    background-color: azure;
+    border-radius: 8px;
+    box-shadow: 0 0 20px 5px #00000011;
+    transition: all .5s ease 0s;
+    width: 50%;
+    margin: auto;
+}
+.button:hover{
+    transform: scale(1.5);
+    box-shadow: 0 0 20px 5px #00000022;
+}
+.lab {
+    text-align: center;
+    flex: 1 1 1px;
+    display: block;
+    font-size: 18;
+    line-height: 3;
+}
+
+.col {
+    flex: 1;
+    text-align: center;
+}
