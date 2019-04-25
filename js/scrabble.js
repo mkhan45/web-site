@@ -29,9 +29,16 @@ var result_template = `
             {{/each}}
 `;
 
+var min_digits = 2;
+var specified_position = false;
+
 function go(){
     var letters = document.getElementById("letters").value.split('');
     var word = "";
+    
+    specified_position = document.getElementById("character").value != "" && document.getElementById("position").value != "";
+    console.log(specified_position);
+    
     jQuery.get('resources/enable1.txt', function(data) {
         var words = data.split("\n");
         word += words.reduce(validWord);
@@ -86,16 +93,34 @@ function go(){
 }
 
 function validWord(accumulator, word, index, array){
+    
+    min_digits = document.getElementById("digits").value.trim();
     var word_letters = word.split('');
     var letters = document.getElementById("letters").value.toLowerCase().split('');
+    
+    var num_wildcards = (document.getElementById("letters").value.match(/\*, /g) || []).length; //doesn't work
+    console.log("Num wildcards = " + num_wildcards);
+    var needed_wildcards = 0;
+    
     var valid = true;
     word_letters.forEach(function(letter){
         if (!letters.includes(letter)){
-            valid = false;
+            needed_wildcards += 1;
+            if (needed_wildcards > num_wildcards){
+                valid = false;
+            }
+        }else if (specified_position === true){
+            var position = document.getElementById("position").value.trim();
+            var character = document.getElementById("character").value.trim();
+            
+            if(word.charAt(position) != character){
+                valid = false;
+            }
         }
         remove_letter(letters, letter);
     });
-    if (valid && word.length > 2){
+    
+    if (valid && word.length >= min_digits){
         return accumulator + word + "<br>";
     }else {
         return accumulator;

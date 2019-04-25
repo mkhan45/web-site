@@ -12,16 +12,23 @@ var sync = require('sync-request');
 var path = require('path');
 var cookieSession = require('cookie-session')
 var simpleoauth2 = require("simple-oauth2");
+var mysql = require('mysql');
+
+var private_vars = require(path.join(__dirname, '..', 'private', 'private_vars.js') );
+console.log(private_vars);
 // -------------- express initialization -------------- //
 // PORT SETUP - NUMBER SPECIFIC TO THIS SYSTEM
 
+
 app.set('port', process.env.PORT || 8080 );
 app.set('view engine', 'hbs');
+
 
 app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/css', express.static(path.join(__dirname, 'css')));
 app.use('/resources', express.static(path.join(__dirname, 'resources')));
 
+express.static.mime.types['wasm'] = 'application/wasm';
 
 // -------------- express 'get' handlers -------------- //
 // These 'getters' are what fetch your pages
@@ -34,6 +41,30 @@ app.use(cookieSession({
 app.get('/', function(req, res){
     var dict = {};
 	res.render('homepage', dict);
+});
+
+app.get('/cookie_clicker', function(req, res){
+   if(req.session.oauth == null){
+       res.send("not logged in, <br> <a href='https://user.tjhsst.edu/2020mkhan/oauthlogin'>Log in</a>");
+   } else {
+       var dict = {
+           oauth: req.session.username.toString(),
+       };
+           
+           res.render("cookie_clicker", dict);
+       }
+});
+
+app.get('/cookie_click_data', function(req, res){
+    var user = req.query.user;
+    
+      pool.query('SELECT s_name FROM students WHERE id=?', "test", function (error, results, fields) {
+          if (error) throw error;
+            // CONSTRUCT AND SEND A RESPONSE
+                outstr = 'Here is your ' + results[0].s_name + '. Have a nice day!';
+                res.send("test");   
+            });
+    res.send(user);
 });
 
 app.get('/foo', function(req, res){
@@ -52,6 +83,10 @@ app.get('/is_a_search', function(req, res){
 
 app.get('/fish', function(req, res){
 	res.sendFile('index.html', { root: __dirname});
+});
+
+app.get('/gravity', function(req, res){
+	res.render('gravity');
 });
 
 app.get('/dog', function(req, res){
@@ -244,6 +279,7 @@ app.get('/oauthcontent', function(req, res){
             if(!error && response.statusCode == 200){
                 result = JSON.parse(body);
                 dict["username"] = result["ion_username"];
+                req.session.username = dict["username"];
                 dict["name"] = result["display_name"];
                 dict["grade"] = result["grade"]["name"];
                 res.render("oauth", dict);
@@ -269,7 +305,6 @@ app.get('/oauthlogout', async function(req, res){
 });
 
 app.get('/login_worker', async function (req, res) {   // <<== async, see line 112
-    
     if (typeof req.query.code != 'undefined') {
         var theCode = req.query.code 
         // .. construct options that will be used to generate a login token

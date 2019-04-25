@@ -3,11 +3,27 @@
 	<link rel="stylesheet" type="text/css" href="css/scrabble.css">
 </head>
 <body>
+    <div class="top_bar">
     <h1>Scrabble</h1>
+    <br> 
+    <nav>
+        <a href="https://user.tjhsst.edu/2020mkhan/">Home   </a>
+        <a href="https://user.tjhsst.edu/2020mkhan/oauthlogout">Logout</a>
+    </nav>
+    </div>
     <form onsubmit="return go()">
         Enter your letters: <br>
-        <input type="text" id="letters"></input>
+        <input type="text" id="letters"></input><br>
+        Min number of digits (default 2): <br>
+        <input type="text" id="digits"></input><br>
+        <br><br>
+        Require character in position: <br>
+        <br> Character <br>
+        <input type="text" id="character"></input> <br>
+        Position (starts at 0) <br>
+        <input type="text" id="position"></input> <br>
     </form>
+    <button onclick="return go()">Go</button>
     
     <div id="words" class="words">
     </div>
