@@ -10,14 +10,14 @@ body {
     font-family: Sans-Serif;
     margin: auto;
     text-align: center;
-    background: #EEEEF0;
+    background: var(--white);
 }
 
 .top_bar{
     text-align: center;
-    background: #353538;
+    background: var(--greyblue);
     height: 15%;
-    color: white;
+    color: var(--white);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -28,9 +28,9 @@ body {
 
 h1 {
     text-align: center;
-    background: #353538;
+    background: var(--greyblue);
     height: 15%;
-    color: white;
+    color: var(--white);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -38,7 +38,7 @@ h1 {
 
 nav {
     text-align: center;
-    background: #353538;
+    background: var(--greyblue);
     height: 5%;
     color: white;
     text-decoration: none;
@@ -48,13 +48,12 @@ nav {
 }
 
 nav a {
-    color: inherit;
+    color: var(--black);
     text-decoration: none;
-    background: black;
+    background: var(--white);
     padding: 5%;
     margin: 5%;
     font-size: 18px;
-    border-radius: 10%;
 }
 
 form {

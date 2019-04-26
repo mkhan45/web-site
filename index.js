@@ -15,7 +15,8 @@ var simpleoauth2 = require("simple-oauth2");
 var mysql = require('mysql');
 
 var private_vars = require(path.join(__dirname, '..', 'private', 'private_vars.js') );
-console.log(private_vars);
+
+var pool = mysql.createPool(sqlvar)
 // -------------- express initialization -------------- //
 // PORT SETUP - NUMBER SPECIFIC TO THIS SYSTEM
 
@@ -44,27 +45,61 @@ app.get('/', function(req, res){
 });
 
 app.get('/cookie_clicker', function(req, res){
-   if(req.session.oauth == null){
+   if(req.session.oauth == null || req.session.username == null){
        res.send("not logged in, <br> <a href='https://user.tjhsst.edu/2020mkhan/oauthlogin'>Log in</a>");
    } else {
        var dict = {
            oauth: req.session.username.toString(),
        };
-           
            res.render("cookie_clicker", dict);
        }
 });
 
-app.get('/cookie_click_data', function(req, res){
-    var user = req.query.user;
-    
-      pool.query('SELECT s_name FROM students WHERE id=?', "test", function (error, results, fields) {
-          if (error) throw error;
+function cookie_click_data(req, res, next){
+    var user = req.session.username;
+    console.log(user.toString());
+      pool.query('SELECT * FROM students WHERE s_name=?', [user.toString()], function (error, results, fields) {
+          if (error) {
+              res.locals.results = error;
+              next();
+          };
             // CONSTRUCT AND SEND A RESPONSE
-                outstr = 'Here is your ' + results[0].s_name + '. Have a nice day!';
-                res.send("test");   
+                res.locals.results = results;
+                next();
             });
-    res.send(user);
+}
+
+app.get('/cookie_click_data', [cookie_click_data], function(req, res){
+    res.json(res.locals.results[0]);
+});
+
+function verify_name(req, res, next){
+    var user = req.session.username;
+    var cookies = req.query.cookies;
+    
+    pool.query('SELECT * FROM students WHERE s_name=?', [user.toString()], function(error, results, fields){
+        if(results.length == 0){
+            console.log("creating row");
+            pool.query('INSERT INTO students(s_name, cookies) VALUE (?, ?)', [user, cookies], function(error, results, fields){console.log(error)});
+            next();
+        }else{
+            next();
+        }
+    });
+}
+
+function cookie_click_save(req, res, next){
+    var user = req.session.username;
+    var cookies = req.query.cookies;
+    
+    pool.query('UPDATE students SET cookies=? WHERE s_name=?', [cookies, user], function(error, results, fields){
+        console.log(cookies + " cookies");
+        next();
+    });
+}
+
+app.get('/cookie_click_saved', [verify_name, cookie_click_save], function(req, res){
+    res.send("cookies");
 });
 
 app.get('/foo', function(req, res){
@@ -319,7 +354,7 @@ app.get('/login_worker', async function (req, res) {   // <<== async, see line 1
         var token = oauth2.accessToken.create(result);
         req.session.oauth = token;
 
-        res.redirect('https://user.tjhsst.edu/2020mkhan/');
+        res.redirect('https://user.tjhsst.edu/2020mkhan/oauthcontent');
     } else {
         res.send('no code attached')
     }

@@ -1,22 +1,4 @@
-CREATE TABLE students(id INT, s_name VARCHAR(100), home VARCHAR(100), PRIMARY KEY(id));
+CREATE TABLE students(s_name VARCHAR(100), cookies INT, last_login DATETIME, PRIMARY KEY(s_name), FOREIGN KEY (s_name) REFERENCES buildings(s_name));
+CREATE TABLE buildings(s_name VARCHAR(100), grandmas INT);
 
-
-INSERT INTO students(id, s_name, home) VALUE (1, 'George', 'VA');
-INSERT INTO students(id, s_name, home) VALUE (2, 'John', 'MA');
-INSERT INTO students(id, s_name, home) VALUE (3, 'Thom', 'VA');
-INSERT INTO students(id, s_name, home) VALUE (4, 'James', 'VA');
-
-
-SELECT * FROM students;
-
-
-INSERT INTO students(id, s_name, home ) VALUES (5, "James", "VA") ON DUPLICATE KEY UPDATE id = VALUES(id), s_name = VALUES(s_name), home = VALUES(home);
-
-
-SELECT * FROM students;
-
-
-INSERT INTO students(id, s_name, home ) VALUES (5, "James", "VA") ON DUPLICATE KEY UPDATE id = VALUES(id), s_name = VALUES(s_name), home = VALUES(home);
-
-
-SELECT * FROM students;
+INSERT INTO students(s_name, cookies) VALUE ('2020mkhan', '1000');

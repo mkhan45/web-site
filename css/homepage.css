@@ -8,10 +8,10 @@
 
 :root {
     --black:#040303;
-    --white:#FAFAFF;
+    --white:#F4F4FE;
     --blue:#6279B8;
     --darkblue:#4A5F8F;
-    --greyblue:#30343F;
+    --greyblue:#2E323D;
 }
 
 h1 {
@@ -61,13 +61,14 @@ a {
     color: black;
     border-radius: 2px;
     box-shadow: 0 0 20px 5px #00000033;
-    transition: all .15s ease 0s;
-    width: 50%;
+    transition: all .125s ease 0s;
+    width: 45%;
     margin: auto;
+    margin-top: 5px;
     margin-bottom: 10px;
 }
 .button:hover{
-    transform: scale(1.15);
+    transform: scale(1.145);
     box-shadow: 0 0 18px 2px #000000AA;
     background: var(--greyblue);
 }
