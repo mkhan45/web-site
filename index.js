@@ -13,6 +13,7 @@ var path = require('path');
 var cookieSession = require('cookie-session')
 var simpleoauth2 = require("simple-oauth2");
 var mysql = require('mysql');
+var bodyParser = require('body-parser');
 
 var private_vars = require(path.join(__dirname, '..', 'private', 'private_vars.js') );
 
@@ -25,6 +26,9 @@ app.set('port', process.env.PORT || 8080 );
 app.set('view engine', 'hbs');
 
 
+app.use(bodyParser.text());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded())
 app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/css', express.static(path.join(__dirname, 'css')));
 app.use('/resources', express.static(path.join(__dirname, 'resources')));
@@ -36,7 +40,9 @@ express.static.mime.types['wasm'] = 'application/wasm';
 
 app.use(cookieSession({
   name: 'username',                  
-  keys: ['abcdefg', '122333444']  
+  keys: ['abcdefg', '122333444'],
+  
+  maxAge: 24 * 60 * 60 * 1000 * 30,
 }))
 
 app.get('/', function(req, res){
@@ -55,22 +61,39 @@ app.get('/cookie_clicker', function(req, res){
        }
 });
 
-function cookie_click_data(req, res, next){
+function cookie_click_cookies(req, res, next){
     var user = req.session.username;
-    console.log(user.toString());
-      pool.query('SELECT * FROM students WHERE s_name=?', [user.toString()], function (error, results, fields) {
-          if (error) {
-              res.locals.results = error;
-              next();
-          };
-            // CONSTRUCT AND SEND A RESPONSE
-                res.locals.results = results;
-                next();
-            });
+    pool.query('SELECT * FROM students WHERE s_name=?', [user.toString()], function (error, results, fields) {
+      if (error) {
+          res.locals.results = error;
+          next();
+      };
+        // CONSTRUCT AND SEND A RESPONSE
+            res.locals.cookies = results;
+            next();
+        });
 }
 
-app.get('/cookie_click_data', [cookie_click_data], function(req, res){
-    res.json(res.locals.results[0]);
+function cookie_click_buildings(req, res, next){
+    var user = req.session.username;
+    pool.query('SELECT * FROM buildings WHERE s_name=?', [user.toString()], function (error, results, fields) {
+      if (error) {
+          res.locals.results = error;
+          next();
+      };
+        // CONSTRUCT AND SEND A RESPONSE
+            res.locals.buildings = results;
+            next();
+        });
+}
+
+app.get('/cookie_click_data', [cookie_click_cookies, cookie_click_buildings], function(req, res){
+    var results = {
+        cookies: res.locals.cookies[0],
+        buildings: res.locals.buildings[0],
+    }
+    
+    res.json(results);
 });
 
 function verify_name(req, res, next){
@@ -100,6 +123,28 @@ function cookie_click_save(req, res, next){
 
 app.get('/cookie_click_saved', [verify_name, cookie_click_save], function(req, res){
     res.send("cookies");
+});
+
+app.get('/todo', function(req, res){
+   if (req.session.username == "2020mkhan"){
+       res.sendFile("resources/todo.txt", {root: __dirname});
+   } else{
+       res.send("no");
+   }
+});
+
+app.post('/todoupdate', function(req, res){
+    const fs = require('fs');
+    console.log(req);
+    fs.writeFile(path.join(__dirname, "resources/todo.txt"), req.body.list, function(err) {
+        if(err) {
+            console.log(err);
+            res.send("not saved");
+        }
+    
+        res.send("saved");
+        console.log("The file was saved!");
+    }); 
 });
 
 app.get('/foo', function(req, res){
