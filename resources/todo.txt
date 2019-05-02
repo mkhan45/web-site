@@ -4,8 +4,9 @@
 
 - [X] subject tests
 
-- [ ] [[Personal Essay]]
-    - [ ] Some part by Thursday
+- [o] [[Personal Essay]]
+    - [X] Some part by Thursday
+    - [ ] The rest of it
 
 - [X] Print BC material
 

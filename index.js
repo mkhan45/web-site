@@ -104,6 +104,7 @@ function verify_name(req, res, next){
         if(results.length == 0){
             console.log("creating row");
             pool.query('INSERT INTO students(s_name, cookies) VALUE (?, ?)', [user, cookies], function(error, results, fields){console.log(error)});
+            pool.query('INSERT INTO buildings(s_name, grandmas, tractors, planets) VALUE (?, ?, ?, ?)', [user, 0, 0, 0], function(error, results, fields){console.log(error)});
             next();
         }else{
             next();
@@ -121,7 +122,21 @@ function cookie_click_save(req, res, next){
     });
 }
 
-app.get('/cookie_click_saved', [verify_name, cookie_click_save], function(req, res){
+function cookie_building_save(req, res, next){
+    var user = req.session.username;
+    var buildings = req.query.buildings;
+    
+    var grandmas = req.query.buildings.grandmas;
+    var tractors = req.query.buildings.tractors;
+    var planets = req.query.buildings.planets;
+    
+    pool.query('UPDATE buildings SET grandmas=?, tractors=?, planets=? WHERE s_name=?', [grandmas, tractors, planets, user], function(error, results, fields){
+        console.log(buildings);
+        next();
+    });
+}
+
+app.get('/cookie_click_saved', [verify_name, cookie_click_save, cookie_building_save], function(req, res){
     res.send("cookies");
 });
 
