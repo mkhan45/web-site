@@ -10,12 +10,6 @@ var buildingCps = {
     planets: 10,
 };
 
-var defaultCosts = {
-    grandmas: 10,
-    tractors: 50,
-    planets: 800,
-};
-
 var buildingCost = {
     grandmas: 10,
     tractors: 50,
@@ -35,23 +29,14 @@ function yum(){
 }
 
 function updateBuildings(building){
-    defaultCosts = {
-        grandmas: 10,
-        tractors: 50,
-        planets: 800,
-    };
-    
     if(cookies >= buildingCost[building]){
         cookies -= buildingCost[building];
-        
         
         if (numBuildings[building] == null){
             numBuildings[building] = 1;
             $(`#${building}`).text(`${building}: ${numBuildings[building]} | ${buildingCost[building]} cookies`);
-        }
-        else{
-            buildingCost = defaultCosts;
-            buildingCost[building] = Math.round(buildingCost[building] * Math.pow(1.3, numBuildings[building] - 1));
+        }else{
+            buildingCost[building] = Math.round(buildingCost[building] * 1.3); 
             numBuildings[building] += 1;
             $(`#${building}`).text(`${building}: ${numBuildings[building]} | ${buildingCost[building]} cookies`);
             updateInfo();
@@ -63,16 +48,11 @@ function updateBuildings(building){
 };
 
 function update(){ //runs once a second
-    cookies += cps;
+    cookies += cps
     updateInfo();
 }
 
 function updateInfo(){
-    defaultCosts = {
-        grandmas: 10,
-        tractors: 50,
-        planets: 800,
-    };
     $('#cookies').text(cookies + " cookies");
 }
 
@@ -81,12 +61,6 @@ function autosave(){ //once every 10 seconds
 }
 
 function load(){
-    defaultCosts = {
-        grandmas: 10,
-        tractors: 50,
-        planets: 800,
-    };
-    buildingCost = defaultCosts;
     $.ajax({
         url: "cookie_click_data",
         type: "get",
@@ -105,9 +79,13 @@ function load(){
                     
                     numBuildings[building] = num;
                     
-                    buildingCost = defaultCosts;
+                    var multiplier = Math.pow(1.3, num);
+                    if (multiplier < 1)
+                        multiplier = 1;
                     
-                    buildingCost[building] = Math.round(defaultCosts[building] * Math.pow(1.3, num - 1));
+                    console.log("Multiplier: " + multiplier);
+                    
+                    buildingCost[building] = Math.round(buildingCost[building] * multiplier);
                     
                     var numText = building + ": " + num + " | " + buildingCost[building] + " cookies";
                     
@@ -131,7 +109,6 @@ function load(){
 
 function updateCPS(){
     cps = 0;
-    buildingCost = defaultCosts;
     for(building in buildingCps){
         cps += buildingCps[building] * numBuildings[building];
     }
@@ -144,10 +121,8 @@ function save(){
         data: {user: session, cookies: cookies, buildings: numBuildings},
         success: function(response) {
             console.log("saved " + cookies + "\n" + numBuildings);
-            load();
         },
         error: function (stat, err) {
-            load();
         }       
     });
 }
