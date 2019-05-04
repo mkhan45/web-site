@@ -42,7 +42,7 @@ app.use(cookieSession({
   name: 'username',                  
   keys: ['abcdefg', '122333444'],
   
-  maxAge: 24 * 60 * 60 * 1000 * 30,
+  maxAge: 24 * 60 * 60 * 1000 * 30, //30 days
 }))
 
 app.get('/', function(req, res){
@@ -99,11 +99,12 @@ app.get('/cookie_click_data', [cookie_click_cookies, cookie_click_buildings], fu
 function verify_name(req, res, next){
     var user = req.session.username;
     var cookies = req.query.cookies;
+    var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
     
     pool.query('SELECT * FROM students WHERE s_name=?', [user.toString()], function(error, results, fields){
         if(results.length == 0){
             console.log("creating row");
-            pool.query('INSERT INTO students(s_name, cookies) VALUE (?, ?)', [user, cookies], function(error, results, fields){console.log(error)});
+            pool.query('INSERT INTO students(s_name, cookies, last_login) VALUE (?, ?, ?)', [user, cookies, date], function(error, results, fields){console.log(error)});
             pool.query('INSERT INTO buildings(s_name, grandmas, tractors, planets) VALUE (?, ?, ?, ?)', [user, 0, 0, 0], function(error, results, fields){console.log(error)});
             next();
         }else{
@@ -116,8 +117,10 @@ function cookie_click_save(req, res, next){
     var user = req.session.username;
     var cookies = req.query.cookies;
     
-    pool.query('UPDATE students SET cookies=? WHERE s_name=?', [cookies, user], function(error, results, fields){
-        console.log(cookies + " cookies");
+    var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    
+    pool.query('UPDATE students SET cookies=?, last_login=? WHERE s_name=?', [cookies, date, user], function(error, results, fields){
+        console.log(cookies + " cookies, login = " +  date);
         next();
     });
 }

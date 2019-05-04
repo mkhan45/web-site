@@ -79,7 +79,7 @@ function load(){
                     
                     numBuildings[building] = num;
                     
-                    var multiplier = Math.pow(1.3, num);
+                    var multiplier = Math.pow(1.3, num - 2);
                     if (multiplier < 1)
                         multiplier = 1;
                     

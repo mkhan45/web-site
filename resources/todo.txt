@@ -20,7 +20,7 @@
 
 - [ ] Lab service
 
-- [ ] xta
+- [X] xta
 
 - [ ] Bring books - find in lost and found maybe
 
