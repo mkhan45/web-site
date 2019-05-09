@@ -63,9 +63,11 @@ app.get('/cookie_clicker', function(req, res){
 
 function cookie_click_cookies(req, res, next){
     var user = req.session.username;
-    pool.query('SELECT * FROM students WHERE s_name=?', [user.toString()], function (error, results, fields) {
+    var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    console.log("Date: ", date);
+    pool.query('CALL load_cookies(?, ?)', [user.toString(), date], function (error, results, fields) {
       if (error) {
-          res.locals.results = error;
+          res.locals.cookies = error;
           next();
       };
         // CONSTRUCT AND SEND A RESPONSE
@@ -89,9 +91,12 @@ function cookie_click_buildings(req, res, next){
 
 app.get('/cookie_click_data', [cookie_click_cookies, cookie_click_buildings], function(req, res){
     var results = {
-        cookies: res.locals.cookies[0],
+        cookies: res.locals.cookies[0][0]["cookie_num"],
         buildings: res.locals.buildings[0],
+        diff: res.locals.cookies[0][0]["date_diff"],
     }
+    
+    console.log(results);
     
     res.json(results);
 });
@@ -100,27 +105,58 @@ function verify_name(req, res, next){
     var user = req.session.username;
     var cookies = req.query.cookies;
     var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    console.log("Date: ", date);
     
     pool.query('SELECT * FROM students WHERE s_name=?', [user.toString()], function(error, results, fields){
         if(results.length == 0){
             console.log("creating row");
-            pool.query('INSERT INTO students(s_name, cookies, last_login) VALUE (?, ?, ?)', [user, cookies, date], function(error, results, fields){console.log(error)});
-            pool.query('INSERT INTO buildings(s_name, grandmas, tractors, planets) VALUE (?, ?, ?, ?)', [user, 0, 0, 0], function(error, results, fields){console.log(error)});
+            res.locals.needs_update = true;
             next();
         }else{
+            res.locals.needs_update = false;
             next();
         }
     });
+}
+
+//should be done by procedure
+function create_buildings(req, res, next){
+    var user = req.session.username;
+    var cookies = req.query.cookies;
+    var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    console.log(res.locals.needs_update);
+    if(res.locals.needs_update == true){
+       pool.query('INSERT INTO buildings(s_name, grandmas, tractors, planets) VALUE (?, ?, ?, ?)', [user, 0, 0, 0], function(error, results, fields){
+           console.log(error)
+        next();      
+       });
+    }else {
+        next()
+    }
+}
+
+function create_students(req, res, next){
+    var user = req.session.username;
+    var cookies = req.query.cookies;
+    var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    if(res.locals.needs_update == true){
+        console.log("creating students row");
+        pool.query('INSERT INTO students(s_name, cookies, last_login) VALUE (?, ?, ?)', [user, cookies, date], function(error, results, fields){
+            next();
+        });
+    }else{
+        next();
+    }
 }
 
 function cookie_click_save(req, res, next){
     var user = req.session.username;
     var cookies = req.query.cookies;
     
-    var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    console.log("here cookies");
     
-    pool.query('UPDATE students SET cookies=?, last_login=? WHERE s_name=?', [cookies, date, user], function(error, results, fields){
-        console.log(cookies + " cookies, login = " +  date);
+    pool.query('UPDATE students SET cookies=? WHERE s_name=?', [cookies, user], function(error, results, fields){
+        console.log("here cookies 2");
         next();
     });
 }
@@ -128,6 +164,8 @@ function cookie_click_save(req, res, next){
 function cookie_building_save(req, res, next){
     var user = req.session.username;
     var buildings = req.query.buildings;
+    
+    console.log("here");
     
     var grandmas = req.query.buildings.grandmas;
     var tractors = req.query.buildings.tractors;
@@ -139,7 +177,7 @@ function cookie_building_save(req, res, next){
     });
 }
 
-app.get('/cookie_click_saved', [verify_name, cookie_click_save, cookie_building_save], function(req, res){
+app.get('/cookie_click_saved', [verify_name, create_buildings, create_students, cookie_click_save, cookie_building_save], function(req, res){
     res.send("cookies");
 });
 

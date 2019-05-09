@@ -2,7 +2,6 @@ var cookies = 0;
 var cps = 0;
 var session;
 
-load();
 
 var buildingCps = {
     grandmas: 1,
@@ -68,8 +67,8 @@ function load(){
         success: function(response) {
             cps = 0;
             console.log(response);
-            cookies = response.cookies.cookies;
-            $('#cookies').text(cookies + " cookies");
+            cookies = response.cookies;
+            seconds_diff = Math.abs(response.diff);
             
             $('#buildings').text("");
             
@@ -97,8 +96,11 @@ function load(){
                 }
             }
             
-            $('#cps').text(cps + " CPS");
+            console.log(cps * seconds_diff);
+            cookies += cps * seconds_diff;
             
+            $('#cookies').text(cookies + " cookies");
+            $('#cps').text(cps + " CPS");
         },
         error: function (stat, err) {
             load();
@@ -129,3 +131,4 @@ function save(){
 
 setInterval(update, 1000);
 setInterval(autosave, 10000);
+load();

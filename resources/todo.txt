@@ -1,29 +1,25 @@
 = Todo =
 
+- [X] [[Spoden Rec Thing]]
+
 - [X] math final MC calc
 
-- [X] subject tests
+- [ ] ACT June 8
 
 - [o] [[Personal Essay]]
     - [X] Some part by Thursday
     - [ ] The rest of it
 
-- [X] Print BC material
+- [ ] Read book
 
-- [X] Choose books
-
-- [ ] History Final
-
-- [o] APUSH Study Guide
-    - [X] 50% by Monday
-    - [ ] The rest of it
+- [X] APUSH Study (Thursday)
 
 - [ ] Lab service
 
 - [X] xta
 
+- [ ] Register for driving thing
+
 - [ ] Bring books - find in lost and found maybe
 
-- [ ] gabor thing
-
-- [ ] Register for driving thing
+- [X] gabor thing
