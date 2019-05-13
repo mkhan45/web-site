@@ -28,11 +28,10 @@ h1 {
     box-shadow: 0px 5px 15px 2px #88888855;
 }
 
-.flexbox {
+.grid {
     font-family: Sans-Serif;
-    display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
 }
 
 ul {
@@ -77,9 +76,9 @@ a {
     color: var(--white);
 }
 .lab {
-    text-align: center;
-    flex: 1 1 1px;
+    grid-column-start: auto;
     display: flex;
+    text-align: center;
     margin: 10px;
     font-size: 18;
     line-height: 3;
@@ -99,4 +98,20 @@ a {
 .col {
     flex: 1;
     text-align: center;
+}
+
+@media only screen and (max-width: 1500px) {
+    .grid {
+        font-family: Sans-Serif;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .grid {
+        font-family: Sans-Serif;
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+    }
 }

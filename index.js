@@ -46,8 +46,11 @@ app.use(cookieSession({
 }))
 
 app.get('/', function(req, res){
-    var dict = {};
-	res.render('homepage', dict);
+	res.render('homepage');
+});
+
+app.get('/newhomepage', function(req, res){
+	res.render('homepage2');
 });
 
 app.get('/cookie_clicker', function(req, res){
@@ -187,6 +190,10 @@ app.get('/todo', function(req, res){
    } else{
        res.send("no");
    }
+});
+
+app.get('/flappy', function(req, res){
+    res.render("flappy");
 });
 
 app.post('/todoupdate', function(req, res){

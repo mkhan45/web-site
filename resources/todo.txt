@@ -2,8 +2,6 @@
 
 - [X] [[Spoden Rec Thing]]
 
-- [X] math final MC calc
-
 - [ ] ACT June 8
 
 - [o] [[Personal Essay]]
@@ -11,8 +9,6 @@
     - [ ] The rest of it
 
 - [ ] Read book
-
-- [X] APUSH Study (Thursday)
 
 - [ ] Lab service
 
