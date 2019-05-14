@@ -100,18 +100,21 @@ a {
     text-align: center;
 }
 
-@media only screen and (max-width: 1500px) {
+@media only screen and (max-width: 1200px) {
     .grid {
-        font-family: Sans-Serif;
-        display: grid;
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 600px){
     .grid {
-        font-family: Sans-Serif;
-        display: grid;
         grid-template-columns: repeat(1, 1fr);
     }
+}
+
+@media only screen and (hover: none){
+    .grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
 }

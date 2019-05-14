@@ -49,9 +49,6 @@ app.get('/', function(req, res){
 	res.render('homepage');
 });
 
-app.get('/newhomepage', function(req, res){
-	res.render('homepage2');
-});
 
 app.get('/cookie_clicker', function(req, res){
    if(req.session.oauth == null || req.session.username == null){
