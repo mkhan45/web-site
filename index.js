@@ -18,6 +18,7 @@ var bodyParser = require('body-parser');
 var private_vars = require(path.join(__dirname, '..', 'private', 'private_vars.js') );
 
 var pool = mysql.createPool(sqlvar)
+
 // -------------- express initialization -------------- //
 // PORT SETUP - NUMBER SPECIFIC TO THIS SYSTEM
 
@@ -49,6 +50,8 @@ app.get('/', function(req, res){
 	res.render('homepage');
 });
 
+
+require('./wiki_index')(app);
 
 app.get('/cookie_clicker', function(req, res){
    if(req.session.oauth == null || req.session.username == null){

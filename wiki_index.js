@@ -1,0 +1,43 @@
+module.exports = function(app){
+    var mysql = require('mysql');
+    var pool = mysql.createPool(sqlvar)
+    
+    
+    app.get('/wiki', function(req, res){
+       if(req.session.oauth == null || req.session.username == null){
+           res.send("not logged in, <br> <a href='https://user.tjhsst.edu/2020mkhan/oauthlogin'>Log in</a>");
+       } else {
+           var dict = {
+               oauth: req.session.username.toString(),
+           };
+               res.render("wiki", dict);
+        }
+    });
+    
+    function load_wiki(req, res, next){
+        var user = req.session.username;
+        pool.query('SELECT wiki FROM wikis WHERE name=?', [user.toString()], function(error, results, fields){
+            if(results.length == 0){
+                console.log("creating row");
+                res.locals.needs_update = true;
+                res.locals.wiki = "error";
+                next();
+            }else{
+                res.locals.needs_update = false;
+                res.locals.wiki = results;
+                next();
+            }
+        });
+    }
+    
+    app.get('/wikiload', [load_wiki], function(req, res){
+        res.json(res.locals.wiki[0].wiki);
+    });
+    
+    app.post('/wikisave', function(req, res){
+        var user = req.session.username;
+        pool.query('UPDATE wikis set wiki=? WHERE name=?', [user.toString(), req.body.text], function(error, results, fields){
+            console.log(results);
+        });
+    });
+}

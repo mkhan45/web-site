@@ -1,0 +1,41 @@
+/*
+ #040303 black
+ #6279B8 blue
+ #49516F dark blue
+ #30343F grey blue
+ #FAFAFF white
+*/
+
+:root {
+    --black:#040303;
+    --white:#F4F4FE;
+    --blue:#6279B8;
+    --darkblue:#4A5F8F;
+    --greyblue:#2E323D;
+}
+
+h1 {
+    text-align: center;
+    font-family: Sans-Serif;
+    display: flex;
+    justify-content: center;
+    color: var(--white);
+    margin: 0;
+    padding: 0;
+    height: 15%;
+    background: var(--greyblue);
+    align-items: center;
+    box-shadow: 0px 5px 15px 2px #88888855;
+}
+
+.wiki{
+    width: 100%;
+    height: 100%;
+    font-family: Sans-Serif;
+    background: var(--white);
+    font-size: 20px;
+}
+
+html {
+    background-color: var(--white);
+}

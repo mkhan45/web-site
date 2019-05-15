@@ -106,7 +106,7 @@ a {
     }
 }
 
-@media only screen and (max-width: 600px){
+@media only screen and (max-width: 660px){
     .grid {
         grid-template-columns: repeat(1, 1fr);
     }
@@ -116,5 +116,21 @@ a {
     .grid {
         grid-template-columns: repeat(1, 1fr);
     }
-}
+    
+    h1 {
+        font-size: 72;
+    }
+
+    .lab{
+        font-size: 36;
+    }
+    
+    .header{
+        margin-bottom: 1px;
+    }
+    
+    .button {
+       font-size: 28;
+       width: 75%;
+    }
 }
