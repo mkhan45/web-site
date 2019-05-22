@@ -35,9 +35,10 @@ module.exports = function(app){
     });
     
     app.post('/wikisave', function(req, res){
-        var user = req.session.username;
-        pool.query('UPDATE wikis set wiki=? WHERE name=?', [user.toString(), req.body.text], function(error, results, fields){
-            console.log(results);
+        var user = req.body.user;
+        var text = req.body.text.toString()
+        pool.query('UPDATE wikis set wiki=? WHERE name=?', [req.body.text.toString(), user.toString()], function(error, results, fields){
+            if(error) console.log(error);
         });
     });
 }

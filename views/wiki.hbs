@@ -4,9 +4,13 @@
     <h1> 
             Wiki:
     </h1>
+    <button onclick="save('{{oauth}}')">Save</button>
 </head>
 <body>
-    <div class="wiki" contenteditable="true" id="wiki_body" onKeyPress="keypressed"></div>
+    <div id="title"></div>
+    <br>
+    <br>
+    <div class="wiki" contenteditable="true" id="wiki_body" oninput="keypressed(event)"></div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="js/wiki.js"></script>
