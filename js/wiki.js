@@ -14,14 +14,17 @@ var json = "";
 var linkJSON = "";
 
 var string_content = "";
-var values = [];
+var values = {"": ""};
 
 function keypressed(event){
     var body = document.getElementById("wiki_body");
     string_content = $("#wiki_body").html();
         
-    if(event.data == null) //enter 
+    if(event.data == null){ //enter 
         string_content += "\n";
+    }
+    
+    console.log(getCaretPosition(body));
         
     parse_links();
     $("#wiki_body").html(string_content);
@@ -49,6 +52,12 @@ function parse_links(){
                 var new_match = match.replace(/{{/g, "");
                 var new_match = new_match.replace(/}}/g, "");
                string_content = string_content.replace(match, `{<u>${new_match}</u>}`);
+               var new_content = {
+                   name: new_match,
+                   text: "",
+                   values: [],
+               };
+               values[new_match.toString()] = new_content;
             }
         });
     }
@@ -116,6 +125,8 @@ function load(username){
                 values.forEach(function(link){
                    text = text.replace('${}$', `<u>${link['name']}</u>`); 
                 });
+            }else{
+                values = {};
             }
             
             $('#title').html(name);

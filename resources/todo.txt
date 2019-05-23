@@ -1,21 +1,11 @@
 = Todo =
 
-- [X] [[Spoden Rec Thing]]
-
 - [ ] ACT June 8
 
-- [o] [[Personal Essay]]
-    - [X] Some part by Thursday
-    - [ ] The rest of it
-
-- [ ] Read book
+- [X] Read book
 
 - [ ] Lab service
-
-- [X] xta
 
 - [ ] Register for driving thing
 
 - [ ] Bring books - find in lost and found maybe
-
-- [X] gabor thing
