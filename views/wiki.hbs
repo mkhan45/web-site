@@ -10,9 +10,16 @@
     <div id="title"></div>
     <br>
     <br>
-    <div class="wiki" contenteditable="true" id="wiki_body" oninput="keypressed(event)"></div>
+    <div class="wiki" contenteditable="true" id="wiki_body" oninput="keypressed(event)" onkeyup="cursor_pos(event)" autofocus></div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="js/wikilib.js"></script>
+<script>
+    Rust.wikilib.then(function(lib){
+        in_braces = lib.in_braces;
+        // parse_links = lib.parse_links;
+    });
+</script>
 <script src="js/wiki.js"></script>
 <script>
     load("{{oauth}}");

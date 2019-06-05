@@ -16,6 +16,8 @@ var linkJSON = "";
 var string_content = "";
 var values = {"": ""};
 
+var cursor_location = 0;
+
 function keypressed(event){
     var body = document.getElementById("wiki_body");
     string_content = $("#wiki_body").html();
@@ -24,14 +26,28 @@ function keypressed(event){
         string_content += "\n";
     }
     
-    console.log(getCaretPosition(body));
-        
+    cursor_location = getCaretPosition(body);
+    console.log(cursor_location);
+    
+    
     parse_links();
     $("#wiki_body").html(string_content);
+    // placeCaretAtEnd(body);
+    // setCaretPosition(body, 5);
+    // var sel = window.getSelection();
+    // sel.collapse(body.firstChild, caret_pos);
     
     placeCaretAtEnd(body);
     // var sel = window.getSelection();
     // sel.collapse($("#wiki_body").firstChild, getCaretPosition($("#wiki_body")));
+}
+
+function cursor_pos(event){
+    console.log(event);
+    if (event.key == "ArrowLeft"){
+        cursor_location -= 1;
+        console.log(in_braces(string_content, cursor_location));
+    }
 }
 
 function parse_links(){
@@ -81,6 +97,24 @@ function placeCaretAtEnd(el) {
     }
 }
 
+function setCaretPosition(el, chars) {
+    if (chars >= 0) {
+        var selection = window.getSelection();
+
+        var range;
+        range = createRange(el.parentNode, { count: chars }, range);
+
+        if (range) {
+            range.collapse(false);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+    }
+    // var selection = window.getSelection();
+    // selection.removeAllRanges();
+    // selection.addRange(range);
+};
+
 function getCaretPosition(editableDiv) {
   var caretPos = 0,
     sel, range;
@@ -104,6 +138,38 @@ function getCaretPosition(editableDiv) {
     }
   }
   return caretPos;
+}
+
+function createRange(node, chars, range) {
+    if (!range) {
+        range = document.createRange()
+        range.selectNode(node);
+        range.selectNodeContents(node);
+        range.setStart(node, 0);
+    }
+
+    if (chars == 0) {
+        range.setEnd(node, chars.count);
+    } else if (node && chars >0) {
+        if (node.nodeType === Node.TEXT_NODE) {
+            if (node.textContent.length < chars.count) {
+                chars -= node.textContent.length;
+            } else {
+                range.setEnd(node, chars.count);
+                chars = 0;
+            }
+        } else {
+           for (var lp = 0; lp < node.childNodes.length; lp++) {
+                range = createRange(node.childNodes[lp], chars, range);
+
+                if (chars.count === 0) {
+                    break;
+                }
+            }
+        }
+    } 
+
+    return range;
 }
 
 function load(username){
@@ -131,6 +197,7 @@ function load(username){
             
             $('#title').html(name);
             $('#wiki_body').html(text);
+            parse_links();
         },
         error: function (stat, err) {
             console.log(err);
