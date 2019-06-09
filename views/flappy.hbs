@@ -4,38 +4,64 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1" name="viewport" />
-    <link rel="stylesheet" type="text/css" href="css/games.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-        var Module = {};
-        var __cargo_web = {};
-        Object.defineProperty( Module, 'canvas', {
-            get: function() {
-                if( __cargo_web.canvas ) {
-                    return __cargo_web.canvas;
-                }
+socket_jump = false;
+socket_pipe = false;
+socket_jump_queue = false;
+socket_pipe_queue = false;
+socket_reset = false;
+socket_reset_queue = false;
 
-                var canvas = document.createElement( 'canvas' );
-                document.querySelector( 'body' ).appendChild( canvas );
-                __cargo_web.canvas = canvas;
 
-                return canvas;
-            }
-        });
+var socket = new WebSocket("wss://user.tjhsst.edu/2020mkhan/echo");
+
+function js_update(){
+    if(socket_jump_queue == true){
+        socket.send("bird");
+        socket_jump_queue = false;
+    }
+
+    if(socket_pipe_queue == true){
+        socket.send("pipes");
+        socket_pipe_queue = false;
+    }
+
+    if(socket_reset_queue == true){
+        socket.send("reset");
+        socket_reset_queue = false;
+    }
+}
+
+socket.onmessage = function(event){
+    console.log(event.data);
+    if(event.data == "bird"){
+        socket_jump = true;
+    }else if(event.data == "pipes"){
+        socket_pipe = true;
+    }else if(event.data == "reset"){
+        socket_reset = true;
+    }
+};
+
+var Module = {};
+var __cargo_web = {};
+Object.defineProperty( Module, 'canvas', {
+    get: function() {
+        if( __cargo_web.canvas ) {
+            return __cargo_web.canvas;
+        }
+
+        var canvas = document.createElement( 'canvas' );
+        document.querySelector( 'body' ).appendChild( canvas );
+        __cargo_web.canvas = canvas;
+
+        return canvas;
+    }
+});
     </script>
 </head>
 <body>
-    <div>
-        Click to jump bird<br>
-        W to increase gap between pipes<br>
-        Keep pipes out of red (bird is fine though)<br>
-        don't die<br>
-    </div>
     <script src="js/two-flappy.js"></script>
-    <script>
-        Rust.two_flappy.then(function(lib){
-            test_js = lib.test_js;
-            // parse_links = lib.parse_links;
-        });
-    </script>
 </body>
 </html>

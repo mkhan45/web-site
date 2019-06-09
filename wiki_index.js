@@ -1,6 +1,7 @@
 module.exports = function(app){
     var mysql = require('mysql');
-    var pool = mysql.createPool(sqlvar)
+    var pool = mysql.createPool(sqlvar);
+    var expressWs = require('express-ws')(app);
     
     
     app.get('/wiki', function(req, res){
@@ -40,5 +41,21 @@ module.exports = function(app){
         pool.query('UPDATE wikis set wiki=? WHERE name=?', [req.body.text.toString(), user.toString()], function(error, results, fields){
             if(error) console.log(error);
         });
+    });
+    
+    app.ws('/echo', function(ws, req){
+       ws.on('message', function(msg){
+           var data = null;
+           if (msg == "bird")
+                data = "bird";
+            else if (msg == "pipes")
+                data = "pipes";
+            else if (msg == "reset")
+                data = "reset";
+                
+            expressWs.getWss().clients.forEach(function(client){
+               client.send(data);   
+            });
+       });
     });
 }

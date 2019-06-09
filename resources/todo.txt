@@ -2,10 +2,8 @@
 
 - [ ] ACT June 8
 
-- [X] Read book
-
-- [ ] Lab service
-
 - [ ] Register for driving thing
 
-- [ ] Bring books - find in lost and found maybe
+- [ ] Electronics 
+      
+- [ ] Web Final

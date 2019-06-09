@@ -2,7 +2,6 @@
 
 // -------------- load packages -------------- //
 // INITIALIZATION STUFF
-
 var express = require('express');
 var app = express();
 var hbs = require('hbs');
@@ -19,6 +18,7 @@ var private_vars = require(path.join(__dirname, '..', 'private', 'private_vars.j
 
 var pool = mysql.createPool(sqlvar)
 
+
 // -------------- express initialization -------------- //
 // PORT SETUP - NUMBER SPECIFIC TO THIS SYSTEM
 
@@ -26,10 +26,11 @@ var pool = mysql.createPool(sqlvar)
 app.set('port', process.env.PORT || 8080 );
 app.set('view engine', 'hbs');
 
+var expressWs = require('express-ws')(app);
 
 app.use(bodyParser.text());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded())
+app.use(bodyParser.urlencoded());
 app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/css', express.static(path.join(__dirname, 'css')));
 app.use('/resources', express.static(path.join(__dirname, 'resources')));
